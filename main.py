@@ -92,7 +92,10 @@ class ModernM3U8DownloaderApp:
     def __init__(self, root):
         self.root = root
         self.root.title("M3U8 下载器 Pro")
-        self.root.geometry("1200x900")
+        self.root.geometry("1400x1000")
+        
+        # 设置最小窗口大小
+        self.root.minsize(1000, 700)
         
         # 初始化配置管理器
         self.config_manager = ConfigManager()
@@ -188,197 +191,199 @@ class ModernM3U8DownloaderApp:
     def create_header(self, parent):
         """创建标题区域"""
         header_frame = ttk.Frame(parent)
-        header_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 15))
+        header_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
         header_frame.columnconfigure(0, weight=1)
         
         # 标题 - 使用 tk.Label 以支持字体设置
         title_label = tk.Label(
             header_frame,
             text="M3U8 下载器 Pro",
-            font=("Helvetica", 24, "bold"),
-            fg="#2c3e50",
-            bg=self.style.lookup('TFrame', 'background')
+            font=("Helvetica", 28, "bold"),
+            fg="#1a237e"
         )
         title_label.grid(row=0, column=0, sticky=tk.W)
         
         # 副标题 - 使用 tk.Label 以支持字体设置
         subtitle_label = tk.Label(
             header_frame,
-            text="高效、稳定的多线程 M3U8 视频下载工具",
-            font=("Helvetica", 10),
-            fg="#7f8c8d",
-            bg=self.style.lookup('TFrame', 'background')
+            text="🚀 高效、稳定的多线程 M3U8 视频下载工具",
+            font=("Helvetica", 11),
+            fg="#555555"
         )
-        subtitle_label.grid(row=1, column=0, sticky=tk.W)
+        subtitle_label.grid(row=1, column=0, sticky=tk.W, pady=(3, 0))
         
     def create_input_section(self, parent):
         """创建任务输入区域"""
-        input_frame = ttk.LabelFrame(parent, text="添加新任务", padding="15")
+        input_frame = ttk.LabelFrame(parent, text="📋 添加新任务", padding="20")
         input_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 15))
         input_frame.columnconfigure(1, weight=1)
         
-        # M3U8 链接输入 - 使用 tk.Label 以支持字体设置
-        tk.Label(input_frame, text="M3U8 链接/文件:", font=("Helvetica", 10, "bold")).grid(
-            row=0, column=0, sticky=tk.W, pady=(0, 8)
+        # M3U8 链接输入
+        tk.Label(input_frame, text="M3U8 链接/文件:", font=("Helvetica", 11, "bold"), fg="#1a237e").grid(
+            row=0, column=0, sticky=tk.W, pady=(0, 6)
         )
         
         url_frame = ttk.Frame(input_frame)
-        url_frame.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=(0, 8), padx=(10, 0))
+        url_frame.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=(0, 6), padx=(15, 0))
         url_frame.columnconfigure(0, weight=1)
         
-        self.url_entry = ttk.Entry(url_frame)
+        self.url_entry = ttk.Entry(url_frame, font=("Consolas", 10))
         self.url_entry.grid(row=0, column=0, sticky=(tk.W, tk.E))
         
         self.select_file_btn = ttk.Button(
             url_frame,
-            text="选择文件",
+            text="📁 选择文件",
             command=self.select_local_m3u8,
-            width=10
+            width=12
         )
-        self.select_file_btn.grid(row=0, column=1, padx=(5, 0))
+        self.select_file_btn.grid(row=0, column=1, padx=(8, 0))
         
-        # 下载位置选择 - 使用 tk.Label 以支持字体设置
-        tk.Label(input_frame, text="下载位置:", font=("Helvetica", 10, "bold")).grid(
-            row=1, column=0, sticky=tk.W, pady=(0, 8)
+        # 下载位置选择
+        tk.Label(input_frame, text="下载位置:", font=("Helvetica", 11, "bold"), fg="#1a237e").grid(
+            row=1, column=0, sticky=tk.W, pady=(0, 6)
         )
         
         folder_frame = ttk.Frame(input_frame)
-        folder_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), pady=(0, 8), padx=(10, 0))
+        folder_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), pady=(0, 6), padx=(15, 0))
         folder_frame.columnconfigure(0, weight=1)
         
-        self.folder_entry = ttk.Entry(folder_frame)
+        self.folder_entry = ttk.Entry(folder_frame, font=("Consolas", 10))
         self.folder_entry.grid(row=0, column=0, sticky=(tk.W, tk.E))
         
         self.browse_btn = ttk.Button(
             folder_frame,
-            text="浏览",
+            text="🔍 浏览",
             command=self.browse_folder,
-            width=10
+            width=12
         )
-        self.browse_btn.grid(row=0, column=1, padx=(5, 0))
+        self.browse_btn.grid(row=0, column=1, padx=(8, 0))
         
-        # 设置区域
+        # 设置区域 - 分为两行
         settings_frame = ttk.Frame(input_frame)
-        settings_frame.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 8))
+        settings_frame.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(10, 0))
+        settings_frame.columnconfigure(1, weight=0)
+        settings_frame.columnconfigure(3, weight=0)
+        settings_frame.columnconfigure(5, weight=1)
         
-        # 线程数设置 - 使用 tk.Label 以支持字体设置
-        tk.Label(settings_frame, text="线程数:", font=("Helvetica", 10)).pack(side=tk.LEFT)
+        # 线程数设置
+        tk.Label(settings_frame, text="线程数:", font=("Helvetica", 10, "bold")).grid(row=0, column=0, sticky=tk.W)
         self.thread_var = tk.StringVar(value="8")
         thread_spinbox = ttk.Spinbox(
             settings_frame,
             from_=1,
             to=32,
             textvariable=self.thread_var,
-            width=8
+            width=8,
+            font=("Helvetica", 10)
         )
-        thread_spinbox.pack(side=tk.LEFT, padx=(5, 20))
+        thread_spinbox.grid(row=0, column=1, padx=(5, 20))
         
-        # 重试次数设置 - 使用 tk.Label 以支持字体设置
-        tk.Label(settings_frame, text="重试次数:", font=("Helvetica", 10)).pack(side=tk.LEFT)
+        # 重试次数设置
+        tk.Label(settings_frame, text="重试次数:", font=("Helvetica", 10, "bold")).grid(row=0, column=2, sticky=tk.W)
         self.retry_var = tk.StringVar(value="5")
         retry_spinbox = ttk.Spinbox(
             settings_frame,
             from_=0,
             to=20,
             textvariable=self.retry_var,
-            width=8
+            width=8,
+            font=("Helvetica", 10)
         )
-        retry_spinbox.pack(side=tk.LEFT, padx=(5, 20))
+        retry_spinbox.grid(row=0, column=3, padx=(5, 0))
         
         # 自动合并选项
         self.auto_merge_var = tk.BooleanVar(value=True)
         auto_merge_check = ttk.Checkbutton(
             settings_frame,
-            text="下载完成后自动合并",
+            text="✓ 下载完成后自动合并",
             variable=self.auto_merge_var
         )
-        auto_merge_check.pack(side=tk.LEFT, padx=(5, 0))
+        auto_merge_check.grid(row=0, column=5, sticky=tk.W, padx=(20, 0))
         
-        # 按钮区域 - 紧凑水平布局
+        # 按钮区域 - 更紧凑和美观
         button_frame = ttk.Frame(input_frame)
-        button_frame.grid(row=3, column=0, columnspan=2, pady=(10, 0))
+        button_frame.grid(row=3, column=0, columnspan=2, pady=(15, 0), sticky=tk.W)
 
         # 主要按钮 - 添加下载任务
         self.download_btn = ttk.Button(
             button_frame,
-            text="🚀 添加下载任务",
+            text="🚀 启动下载",
             command=self.add_download_task,
-            width=15,
-            style="Accent.TButton"
+            width=18
         )
-        self.download_btn.pack(side=tk.LEFT, padx=(0, 6))
+        self.download_btn.pack(side=tk.LEFT, padx=(0, 8))
 
         # 批量导入按钮
         self.batch_import_btn = ttk.Button(
             button_frame,
             text="📂 批量导入",
             command=self.batch_import_tasks,
-            width=10,
-            style="Outline.TButton"
+            width=14
         )
-        self.batch_import_btn.pack(side=tk.LEFT, padx=(0, 6))
+        self.batch_import_btn.pack(side=tk.LEFT, padx=(0, 8))
 
         # 合并TS按钮
         self.merge_btn = ttk.Button(
             button_frame,
             text="🔗 合并TS",
             command=self.merge_segments,
-            width=8,
-            style="Outline.TButton"
+            width=12
         )
-        self.merge_btn.pack(side=tk.LEFT, padx=(0, 6))
+        self.merge_btn.pack(side=tk.LEFT, padx=(0, 8))
 
         # 设置按钮
         self.settings_btn = ttk.Button(
             button_frame,
             text="⚙️ 设置",
             command=self.open_settings_dialog,
-            width=6,
-            style="Outline.TButton"
+            width=10
         )
         self.settings_btn.pack(side=tk.LEFT)
         
     def create_task_list_section(self, parent):
         """创建任务列表区域"""
-        task_frame = ttk.LabelFrame(parent, text="下载任务", padding="15")
+        task_frame = ttk.LabelFrame(parent, text="📥 下载任务", padding="15")
         task_frame.grid(row=2, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 15))
         task_frame.columnconfigure(0, weight=1)
         task_frame.rowconfigure(0, weight=1)
         parent.rowconfigure(2, weight=1)
         
-        # 创建任务列表 Treeview - 支持树形结构显示线程
+        # 创建任务列表 Treeview - 支持树形结构显示
         self.task_tree = ttk.Treeview(
             task_frame,
             columns=("name", "status", "progress", "speed", "eta", "size", "time"),
             show="tree headings",
-            height=10
+            height=12
         )
         
-        # 设置列标题和宽度
+        # 设置列标题和宽度 - 优化列宽
         self.task_tree.heading("name", text="任务名称")
         self.task_tree.heading("status", text="状态")
         self.task_tree.heading("progress", text="进度")
-        self.task_tree.heading("speed", text="速度")
+        self.task_tree.heading("speed", text="下载速度")
         self.task_tree.heading("eta", text="剩余时间")
-        self.task_tree.heading("size", text="大小")
-        self.task_tree.heading("time", text="时间")
+        self.task_tree.heading("size", text="文件大小")
+        self.task_tree.heading("time", text="耗时")
         
-        # 设置列标题和宽度
+        # 设置列宽
         self.task_tree.heading("#0", text="")
         self.task_tree.column("#0", width=30, stretch=False)
         
-        self.task_tree.column("name", width=280, anchor=tk.W)
-        self.task_tree.column("status", width=110, anchor=tk.CENTER)
-        self.task_tree.column("progress", width=200, anchor=tk.W)
-        self.task_tree.column("speed", width=130, anchor=tk.CENTER)
-        self.task_tree.column("eta", width=110, anchor=tk.CENTER)
-        self.task_tree.column("size", width=160, anchor=tk.CENTER)
-        self.task_tree.column("time", width=160, anchor=tk.CENTER)
+        self.task_tree.column("name", width=300, anchor=tk.W)
+        self.task_tree.column("status", width=100, anchor=tk.CENTER)
+        self.task_tree.column("progress", width=180, anchor=tk.W)
+        self.task_tree.column("speed", width=120, anchor=tk.CENTER)
+        self.task_tree.column("eta", width=100, anchor=tk.CENTER)
+        self.task_tree.column("size", width=130, anchor=tk.CENTER)
+        self.task_tree.column("time", width=130, anchor=tk.CENTER)
         
-        # 配置交替行颜色（如果支持）
+        # 配置交替行颜色
         try:
-            self.task_tree.tag_configure("evenrow", background="#f0f0f0")
+            self.task_tree.tag_configure("evenrow", background="#f5f5f5")
             self.task_tree.tag_configure("oddrow", background="#ffffff")
+            self.task_tree.tag_configure("running", foreground="#2196F3")
+            self.task_tree.tag_configure("completed", foreground="#4CAF50")
+            self.task_tree.tag_configure("failed", foreground="#f44336")
         except:
             pass
         
@@ -395,33 +400,31 @@ class ModernM3U8DownloaderApp:
         
         # 任务操作按钮
         task_button_frame = ttk.Frame(task_frame)
-        task_button_frame.grid(row=2, column=0, columnspan=2, pady=(10, 0), sticky=tk.W)
+        task_button_frame.grid(row=2, column=0, columnspan=2, pady=(12, 0), sticky=tk.W)
         
         self.start_task_btn = ttk.Button(
             task_button_frame,
-            text="▶ 开始任务",
+            text="▶ 启动",
             command=self.start_selected_task,
-            width=12,
-            style="Success.TButton"
+            width=10
         )
-        self.start_task_btn.pack(side=tk.LEFT, padx=(0, 5))
+        self.start_task_btn.pack(side=tk.LEFT, padx=(0, 6))
         
         self.stop_task_btn = ttk.Button(
             task_button_frame,
-            text="⏹ 停止任务",
+            text="⏹ 停止",
             command=self.stop_selected_task,
-            width=12,
-            style="Danger.TButton"
+            width=10
         )
-        self.stop_task_btn.pack(side=tk.LEFT, padx=(0, 5))
+        self.stop_task_btn.pack(side=tk.LEFT, padx=(0, 6))
         
         self.remove_task_btn = ttk.Button(
             task_button_frame,
-            text="🗑 移除任务",
+            text="🗑 移除",
             command=self.remove_selected_task,
-            width=12
+            width=10
         )
-        self.remove_task_btn.pack(side=tk.LEFT, padx=(0, 5))
+        self.remove_task_btn.pack(side=tk.LEFT, padx=(0, 6))
         
         self.clear_completed_btn = ttk.Button(
             task_button_frame,
@@ -429,24 +432,23 @@ class ModernM3U8DownloaderApp:
             command=self.clear_completed_tasks,
             width=15
         )
-        self.clear_completed_btn.pack(side=tk.LEFT, padx=(0, 5))
+        self.clear_completed_btn.pack(side=tk.LEFT, padx=(0, 6))
         
         self.view_history_btn = ttk.Button(
             task_button_frame,
-            text="📜 查看历史",
+            text="📜 历史记录",
             command=self.view_download_history,
-            width=15
+            width=13
         )
-        self.view_history_btn.pack(side=tk.LEFT, padx=(0, 5))
+        self.view_history_btn.pack(side=tk.LEFT, padx=(0, 6))
         
         self.performance_btn = ttk.Button(
             task_button_frame,
             text="📊 性能统计",
             command=self.show_performance_stats,
-            width=15,
-            style="Accent.TButton"
+            width=13
         )
-        self.performance_btn.pack(side=tk.LEFT, padx=(5, 0))
+        self.performance_btn.pack(side=tk.LEFT, padx=(0, 0))
 
         # 创建任务列表右键菜单
         self.task_context_menu = tk.Menu(self.root, tearoff=0)
@@ -460,13 +462,14 @@ class ModernM3U8DownloaderApp:
         
     def create_log_section(self, parent):
         """创建日志区域"""
-        log_frame = ttk.LabelFrame(parent, text="下载日志", padding="15")
+        log_frame = ttk.LabelFrame(parent, text="📝 下载日志", padding="15")
         log_frame.grid(row=3, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 15))
         log_frame.columnconfigure(0, weight=1)
         log_frame.rowconfigure(0, weight=1)
         parent.rowconfigure(3, weight=1)
         
-        self.log_text = tk.Text(log_frame, height=8, width=70, font=("Consolas", 9))
+        # 日志文本区域
+        self.log_text = tk.Text(log_frame, height=6, width=70, font=("Consolas", 9), bg="#f8f8f8", relief=tk.FLAT, bd=1)
         self.log_text.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
         
         # 滚动条
@@ -478,38 +481,51 @@ class ModernM3U8DownloaderApp:
         log_scrollbar_x.grid(row=1, column=0, sticky=(tk.W, tk.E))
         self.log_text.configure(xscrollcommand=log_scrollbar_x.set)
         
+        # 日志操作按钮
+        log_button_frame = ttk.Frame(log_frame)
+        log_button_frame.grid(row=2, column=0, columnspan=2, pady=(8, 0), sticky=tk.W)
+        
         # 清空日志按钮
         clear_log_btn = ttk.Button(
-            log_frame,
-            text="清空日志",
-            command=self.clear_log
+            log_button_frame,
+            text="🗑 清空日志",
+            command=self.clear_log,
+            width=12
         )
-        clear_log_btn.grid(row=2, column=0, pady=(5, 0), sticky=tk.E)
+        clear_log_btn.pack(side=tk.LEFT, padx=(0, 8))
+        
+        # 导出日志按钮
+        export_log_btn = ttk.Button(
+            log_button_frame,
+            text="💾 导出日志",
+            command=self.export_log,
+            width=12
+        )
+        export_log_btn.pack(side=tk.LEFT)
         
     def create_status_bar(self, parent):
         """创建状态栏"""
-        status_frame = ttk.Frame(parent)
+        status_frame = ttk.Frame(parent, relief=tk.SUNKEN)
         status_frame.grid(row=4, column=0, sticky=(tk.W, tk.E))
-        status_frame.columnconfigure(1, weight=1)
+        status_frame.columnconfigure(2, weight=1)
         
-        # 状态图标
-        status_icon_label = ttk.Label(status_frame, text="ℹ️")
-        status_icon_label.grid(row=0, column=0, padx=(0, 5))
+        # 状态文本
+        self.status_var = tk.StringVar(value="✓ 就绪")
+        self.status_label = tk.Label(status_frame, textvariable=self.status_var, font=("Helvetica", 9), fg="#2e7d32", relief=tk.FLAT, padx=10, pady=5)
+        self.status_label.grid(row=0, column=0, sticky=tk.W)
         
-        # 状态文本 - 使用 tk.Label 以支持字体设置
-        self.status_var = tk.StringVar(value="就绪")
-        self.status_label = tk.Label(status_frame, textvariable=self.status_var, font=("Helvetica", 9))
-        self.status_label.grid(row=0, column=1, sticky=tk.W)
+        # 分隔符
+        ttk.Separator(status_frame, orient=tk.VERTICAL).grid(row=0, column=1, sticky=(tk.N, tk.S), padx=5)
         
-        # 队列状态 - 使用 tk.Label 以支持字体设置
+        # 队列状态
         self.queue_var = tk.StringVar(value="队列: 0/0")
-        self.queue_label = tk.Label(status_frame, textvariable=self.queue_var, font=("Helvetica", 9), fg="#2196F3")
-        self.queue_label.grid(row=0, column=2, padx=(10, 0))
+        self.queue_label = tk.Label(status_frame, textvariable=self.queue_var, font=("Helvetica", 9), fg="#1565c0", relief=tk.FLAT, padx=10, pady=5)
+        self.queue_label.grid(row=0, column=2, sticky=tk.W)
         
-        # 时间显示 - 使用 tk.Label 以支持字体设置
+        # 时间显示
         self.time_var = tk.StringVar(value="")
-        self.time_label = tk.Label(status_frame, textvariable=self.time_var, font=("Helvetica", 9))
-        self.time_label.grid(row=0, column=3, padx=(10, 0))
+        self.time_label = tk.Label(status_frame, textvariable=self.time_var, font=("Helvetica", 9), relief=tk.FLAT, padx=10, pady=5)
+        self.time_label.grid(row=0, column=3, sticky=tk.E)
         
         # 更新时间
         self.update_time()
@@ -563,6 +579,21 @@ class ModernM3U8DownloaderApp:
         """清空日志"""
         self.log_text.delete(1.0, tk.END)
         
+    def export_log(self):
+        """导出日志"""
+        try:
+            file_path = filedialog.asksaveasfilename(
+                defaultextension=".log",
+                filetypes=[("日志文件", "*.log"), ("文本文件", "*.txt"), ("所有文件", "*.*")]
+            )
+            if file_path:
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(self.log_text.get(1.0, tk.END))
+                self.log_message(f"✓ 日志已导出: {file_path}")
+                messagebox.showinfo("导出成功", f"日志已成功导出到:\n{file_path}")
+        except Exception as e:
+            messagebox.showerror("导出失败", f"导出日志失败: {str(e)}")
+        
     def format_size(self, bytes_size):
         """格式化文件大小"""
         if bytes_size < 1024:
@@ -601,12 +632,17 @@ class ModernM3U8DownloaderApp:
             if not name.endswith('.m3u8'):
                 name = "M3U8 下载任务"
         
-        task_id = task_manager.add_task(url, folder, thread_count, retry_count, auto_merge, name)
+        # 添加时间戳到任务名，防止同一链接重复下载时无法区分
+        from datetime import datetime
+        timestamp = datetime.now().strftime("_%Y%m%d_%H%M%S")
+        name_with_time = name + timestamp
+        
+        task_id = task_manager.add_task(url, folder, thread_count, retry_count, auto_merge, name_with_time)
         
         # 将任务添加到下载队列
         self.download_queue.add_to_queue(task_id)
         
-        self.log_message(f"✓ 已添加下载任务到队列: {name}")
+        self.log_message(f"✓ 已添加下载任务到队列: {name_with_time}")
         self.status_var.set("已添加下载任务到队列")
         
         # 清空输入框
@@ -662,8 +698,13 @@ class ModernM3U8DownloaderApp:
                     if not name.endswith('.m3u8'):
                         name = f"批量导入_{imported_count + 1}"
                 
+                # 添加时间戳到任务名，防止同一链接重复下载时无法区分
+                from datetime import datetime
+                timestamp = datetime.now().strftime("_%Y%m%d_%H%M%S")
+                name_with_time = name + timestamp
+                
                 # 添加任务
-                task_id = task_manager.add_task(url, folder, thread_count, retry_count, auto_merge, name)
+                task_id = task_manager.add_task(url, folder, thread_count, retry_count, auto_merge, name_with_time)
                 self.download_queue.add_to_queue(task_id)
                 imported_count += 1
             
@@ -2621,10 +2662,16 @@ class ModernM3U8DownloaderApp:
             messagebox.showerror("错误", "在选择的目录中未找到 TS 片段文件")
             return
             
+        # 生成默认文件名（包含时间戳）
+        from datetime import datetime
+        timestamp = datetime.now().strftime("_%Y%m%d_%H%M%S")
+        default_filename = f"output{timestamp}.mp4"
+        
         # 询问输出文件名
         output_file = filedialog.asksaveasfilename(
             title="保存合并后的视频文件",
             defaultextension=".mp4",
+            initialfile=default_filename,
             filetypes=[("MP4 files", "*.mp4"), ("All files", "*.*")]
         )
         if not output_file:

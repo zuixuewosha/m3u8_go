@@ -84,8 +84,20 @@ def main():
                        help="合并方法 (ffmpeg 或 copy)", default="ffmpeg")
     parser.add_argument("-y", "--yes", action="store_true",
                        help="自动确认，跳过交互式提示")
+    parser.add_argument("--add-timestamp", action="store_true",
+                       help="为输出文件名添加时间戳")
     
     args = parser.parse_args()
+    
+    # 如果需要添加时间戳，修改输出文件名
+    if args.add_timestamp:
+        from datetime import datetime
+        timestamp = datetime.now().strftime("_%Y%m%d_%H%M%S")
+        # 在文件扩展名前插入时间戳
+        if args.output.endswith('.mp4'):
+            args.output = args.output[:-4] + timestamp + '.mp4'
+        else:
+            args.output = args.output + timestamp
     
     # 检查FFmpeg是否可用
     ffmpeg_available = False
