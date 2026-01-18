@@ -1,0 +1,14 @@
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-TARGETDURATION:10
+#EXTINF:10.0,
+https://example.com/segment_00001.ts
+#EXTINF:10.0,
+https://example.com/segment_00002.ts
+#EXTINF:10.0,
+https://example.com/segment_00003.ts
+#EXTINF:10.0,
+https://example.com/segment_00004.ts
+#EXTINF:10.0,
+https://example.com/segment_00005.ts
+#EXT-X-ENDLIST
