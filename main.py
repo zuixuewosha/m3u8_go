@@ -2012,12 +2012,11 @@ class ModernM3U8DownloaderApp:
             
     def _download_segment_with_optimizer(self, downloader, task_id, url, filepath, semaphore, max_retries, progress_callback, stop_check):
         """使用优化下载器下载单个片段"""
+        # 在下载前获取信号量，并确保在结束时释放以防止槽位泄漏
+        semaphore.acquire()
         try:
-            # 在下载前获取信号量
-            semaphore.acquire()
-            
             self.log_message(f"🔄 开始下载片段: {os.path.basename(filepath)} (URL: {url})")
-            
+
             success = downloader.download_segment(
                 url=url,
                 filepath=filepath,
@@ -2026,7 +2025,7 @@ class ModernM3U8DownloaderApp:
                 max_retries=max_retries,
                 stop_check=stop_check
             )
-            
+
             if not success:
                 task = task_manager.get_task(task_id)
                 if task and task.status != TaskStatus.STOPPED:
@@ -2037,13 +2036,18 @@ class ModernM3U8DownloaderApp:
                     self.log_message(f"  - 文件是否存在: {os.path.exists(filepath)}")
                     if os.path.exists(filepath):
                         self.log_message(f"  - 文件大小: {os.path.getsize(filepath)} 字节")
-                    
+
         except Exception as e:
             error_detail = self._parse_download_error(str(e))
             self.log_message(f"✗ 下载 {os.path.basename(filepath)} 时出现异常: {error_detail}")
             self.log_message(f"  - 详细错误: {str(e)}")
             self.log_message(f"  - 文件路径: {filepath}")
             self.log_message(f"  - 下载URL: {url}")
+        finally:
+            try:
+                semaphore.release()
+            except Exception:
+                pass
             
     def update_task_progress_callback(self, task_id, downloaded_bytes, total_bytes, estimated_total):
         """更新任务进度的回调函数"""

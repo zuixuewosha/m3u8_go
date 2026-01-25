@@ -1,0 +1,9 @@
+Add .gitignore; Update advanced_downloader.py, main.py, start.bat, task_manager.py
+
+A .gitignore  - add .gitignore
+M advanced_downloader.py  - update advanced_downloader.py
+M main.py  - update main.py
+M start.bat  - update start.bat
+M task_manager.py  - update task_manager.py
+
+Generated commit message created by assistant on 2026-01-25.

@@ -229,12 +229,15 @@ class TaskManager:
         with self.lock:
             if task_id in self.tasks:
                 task = self.tasks[task_id]
-                # 累加进度而不是直接替换
-                if progress > 0:
-                    task.progress = min(task.progress + progress, 100.0)
-                # 如果progress为0，保持当前进度不变
+                # 将传入的 progress 视为绝对百分比（0-100），直接设置
+                try:
+                    task.progress = min(max(float(progress), 0.0), 100.0)
+                except Exception:
+                    pass
+
+                # 下载字节和总字节采用替换更新（仅在提供正值时更新）
                 if downloaded_bytes > 0:
-                    task.downloaded_bytes += downloaded_bytes
+                    task.downloaded_bytes = downloaded_bytes
                 if total_bytes > 0:
                     task.total_bytes = total_bytes
                 if speed:

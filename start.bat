@@ -7,7 +7,12 @@ echo    M3U8 Downloader Pro
 echo ========================================
 echo.
 
-python main.py
+if exist ".venv\Scripts\python.exe" (
+    echo Using virtualenv Python
+    .venv\Scripts\python.exe main.py
+) else (
+    python main.py
+)
 
 if %errorlevel% neq 0 (
     echo.

@@ -8,11 +8,33 @@ import queue
 import time
 import os
 import requests
+import sys
+import re
 from typing import List, Dict, Callable, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from enum import Enum
 from urllib.parse import urlparse, urljoin
+
+
+# Safe print wrapper to avoid UnicodeEncodeError on consoles with limited encodings (eg. GBK)
+def _safe_print(*args, **kwargs):
+    try:
+        __builtins__['print'](*args, **kwargs)
+    except UnicodeEncodeError:
+        enc = getattr(sys.stdout, 'encoding', None) or 'utf-8'
+        try:
+            s = ' '.join(str(a) for a in args)
+            safe = s.encode(enc, errors='replace').decode(enc, errors='replace')
+            __builtins__['print'](safe, **kwargs)
+        except Exception:
+            # fallback: remove non-ascii
+            s = ' '.join(str(a) for a in args)
+            fallback = re.sub(r'[^\x00-\x7F]+', '?', s)
+            __builtins__['print'](fallback, **kwargs)
+
+# Override module print with safe version
+print = _safe_print
 
 
 class DownloadPriority(Enum):
